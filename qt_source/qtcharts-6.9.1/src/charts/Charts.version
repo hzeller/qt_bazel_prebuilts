@@ -1,0 +1,176 @@
+NonQt {
+local:
+    _ZT[VTIS]S*;_ZT[VTIS]NS*;
+    _ZT[VTIS]PS*;_ZT[VTIS]PNS*;
+    _ZT[VTIS]PKS*;_ZT[VTIS]PKNS*;
+    _ZS*; _ZNS*; _Z[RO]S*; _ZN[RO]S*;
+    _Z[VK]S*; _ZN[VK]S*; _Z[VK][RO]S*; _ZN[VK][RO]S*;
+    _ZVKS*; _ZNVKS*; _ZVK[RO]S*; _ZNVK[RO]S*;
+    _ZG[VR]S*; _ZG[VR]NS*; _ZG[VR][RO]S*; _ZG[VR]N[RO]S*;
+    _ZG[VR][VK]S*; _ZG[VR]N[VK]S*; _ZG[VR][VK][RO]S*; _ZG[VR]N[VK][RO]S*;
+    _ZG[VR]VKS*; _ZG[VR]NVKS*; _ZG[VR]VK[RO]S*; _ZG[VR]NVK[RO]S*;
+    _ZGTtS*; _ZGTtNS*; _ZGTt[RO]S*; _ZGTtN[RO]S*;
+    _ZGTt[VK]S*; _ZGTtN[VK]S*; _ZGTt[VK][RO]S*; _ZGTtN[VK][RO]S*;
+    _ZGTtVKS*; _ZGTtNVKS*; _ZGTtVK[RO]S*; _ZGTtNVK[RO]S*;
+};
+Qt_6_PRIVATE_API { qt_private_api_tag*;
+    *13AxisAnimation*;                                  # animations/axisanimation_p.h:24
+    *12BarAnimation*;                                   # animations/baranimation_p.h:23
+    *16BoxPlotAnimation*;                               # animations/boxplotanimation_p.h:27
+    *20BoxWhiskersAnimation*;                           # animations/boxwhiskersanimation_p.h:26
+    *20CandlestickAnimation*;                           # animations/candlestickanimation_p.h:27
+    *29CandlestickBodyWicksAnimation*;                  # animations/candlestickbodywicksanimation_p.h:25
+    *14ChartAnimation*;                                 # animations/chartanimation_p.h:24
+    *12PieAnimation*;                                   # animations/pieanimation_p.h:25
+    *17PieSliceAnimation*;                              # animations/piesliceanimation_p.h:24
+    *16ScatterAnimation*;                               # animations/scatteranimation_p.h:23
+    *15SplineAnimation*;                                # animations/splineanimation_p.h:26
+    *11XYAnimation*;                                    # animations/xyanimation_p.h:24
+    *13AreaChartItem*;                                  # areachart/areachartitem_p.h:26
+    *13AreaBoundItem*;                                  # areachart/areachartitem_p.h:91
+    *18QAreaSeriesPrivate*;                             # areachart/qareaseries_p.h:24
+    *21ChartBarCategoryAxisX*;                          # axis/barcategoryaxis/chartbarcategoryaxisx_p.h:24
+    *21ChartBarCategoryAxisY*;                          # axis/barcategoryaxis/chartbarcategoryaxisy_p.h:24
+    *23QBarCategoryAxisPrivate*;                        # axis/barcategoryaxis/qbarcategoryaxis_p.h:24
+    *18CartesianChartAxis*;                             # axis/cartesianchartaxis_p.h:24
+    *18ChartCategoryAxisX*;                             # axis/categoryaxis/chartcategoryaxisx_p.h:23
+    *18ChartCategoryAxisY*;                             # axis/categoryaxis/chartcategoryaxisy_p.h:23
+    *29PolarChartCategoryAxisAngular*;                  # axis/categoryaxis/polarchartcategoryaxisangular_p.h:23
+    *28PolarChartCategoryAxisRadial*;                   # axis/categoryaxis/polarchartcategoryaxisradial_p.h:23
+    *20QCategoryAxisPrivate*;                           # axis/categoryaxis/qcategoryaxis_p.h:27
+    *16ChartAxisElement*;                               # axis/chartaxiselement_p.h:33
+    *15ChartColorAxisX*;                                # axis/coloraxis/chartcoloraxisx_p.h:23
+    *15ChartColorAxisY*;                                # axis/coloraxis/chartcoloraxisy_p.h:23
+    *17QColorAxisPrivate*;                              # axis/coloraxis/qcoloraxis_p.h:22
+    *18ChartDateTimeAxisX*;                             # axis/datetimeaxis/chartdatetimeaxisx_p.h:23
+    *18ChartDateTimeAxisY*;                             # axis/datetimeaxis/chartdatetimeaxisy_p.h:23
+    *17DateTimeAxisLabel*;                              # axis/datetimeaxis/datetimeaxislabel_p.h:22
+    *29PolarChartDateTimeAxisAngular*;                  # axis/datetimeaxis/polarchartdatetimeaxisangular_p.h:23
+    *28PolarChartDateTimeAxisRadial*;                   # axis/datetimeaxis/polarchartdatetimeaxisradial_p.h:23
+    *20QDateTimeAxisPrivate*;                           # axis/datetimeaxis/qdatetimeaxis_p.h:23
+    *17EditableAxisLabel*;                              # axis/editableaxislabel_p.h:24
+    *14HorizontalAxis*;                                 # axis/horizontalaxis_p.h:21
+    *13LineArrowItem*;                                  # axis/linearrowitem_p.h:23
+    *18ChartLogValueAxisX*;                             # axis/logvalueaxis/chartlogvalueaxisx_p.h:23
+    *18ChartLogValueAxisY*;                             # axis/logvalueaxis/chartlogvalueaxisy_p.h:23
+    *29PolarChartLogValueAxisAngular*;                  # axis/logvalueaxis/polarchartlogvalueaxisangular_p.h:23
+    *28PolarChartLogValueAxisRadial*;                   # axis/logvalueaxis/polarchartlogvalueaxisradial_p.h:23
+    *20QLogValueAxisPrivate*;                           # axis/logvalueaxis/qlogvalueaxis_p.h:22
+    *14PolarChartAxis*;                                 # axis/polarchartaxis_p.h:21
+    *21PolarChartAxisAngular*;                          # axis/polarchartaxisangular_p.h:22
+    *20PolarChartAxisRadial*;                           # axis/polarchartaxisradial_p.h:22
+    *20QAbstractAxisPrivate*;                           # axis/qabstractaxis_p.h:37
+    *15ChartValueAxisX*;                                # axis/valueaxis/chartvalueaxisx_p.h:23
+    *15ChartValueAxisY*;                                # axis/valueaxis/chartvalueaxisy_p.h:23
+    *26PolarChartValueAxisAngular*;                     # axis/valueaxis/polarchartvalueaxisangular_p.h:24
+    *25PolarChartValueAxisRadial*;                      # axis/valueaxis/polarchartvalueaxisradial_p.h:23
+    *17QValueAxisPrivate*;                              # axis/valueaxis/qvalueaxis_p.h:22
+    *14ValueAxisLabel*;                                 # axis/valueaxis/valueaxislabel_p.h:20
+    *12VerticalAxis*;                                   # axis/verticalaxis_p.h:21
+    *20AbstractBarChartItem*;                           # barchart/abstractbarchartitem_p.h:34
+    *3Bar*;                                             # barchart/bar_p.h:26
+    *22HorizontalBarChartItem*;                         # barchart/horizontal/bar/horizontalbarchartitem_p.h:22
+    *27QHorizontalBarSeriesPrivate*;                    # barchart/horizontal/bar/qhorizontalbarseries_p.h:22
+    *29HorizontalPercentBarChartItem*;                  # barchart/horizontal/percent/horizontalpercentbarchartitem_p.h:22
+    *34QHorizontalPercentBarSeriesPrivate*;             # barchart/horizontal/percent/qhorizontalpercentbarseries_p.h:22
+    *29HorizontalStackedBarChartItem*;                  # barchart/horizontal/stacked/horizontalstackedbarchartitem_p.h:22
+    *34QHorizontalStackedBarSeriesPrivate*;             # barchart/horizontal/stacked/qhorizontalstackedbarseries_p.h:22
+    *25QAbstractBarSeriesPrivate*;                      # barchart/qabstractbarseries_p.h:28
+    *22QBarModelMapperPrivate*;                         # barchart/qbarmodelmapper_p.h:28
+    *14QBarSetPrivate*;                                 # barchart/qbarset_p.h:26
+    *12BarChartItem*;                                   # barchart/vertical/bar/barchartitem_p.h:24
+    *17QBarSeriesPrivate*;                              # barchart/vertical/bar/qbarseries_p.h:23
+    *19PercentBarChartItem*;                            # barchart/vertical/percent/percentbarchartitem_p.h:25
+    *24QPercentBarSeriesPrivate*;                       # barchart/vertical/percent/qpercentbarseries_p.h:23
+    *24QStackedBarSeriesPrivate*;                       # barchart/vertical/stacked/qstackedbarseries_p.h:23
+    *19StackedBarChartItem*;                            # barchart/vertical/stacked/stackedbarchartitem_p.h:24
+    *16BoxPlotChartItem*;                               # boxplotchart/boxplotchartitem_p.h:29
+    *11BoxWhiskers*;                                    # boxplotchart/boxwhiskers_p.h:30
+    *15BoxWhiskersData*;                                # boxplotchart/boxwhiskersdata_p.h:22
+    *26QBoxPlotModelMapperPrivate*;                     # boxplotchart/qboxplotmodelmapper_p.h:28
+    *21QBoxPlotSeriesPrivate*;                          # boxplotchart/qboxplotseries_p.h:26
+    *14QBoxSetPrivate*;                                 # boxplotchart/qboxset_p.h:27
+    *11Candlestick*;                                    # candlestickchart/candlestick_p.h:28
+    *20CandlestickChartItem*;                           # candlestickchart/candlestickchartitem_p.h:26
+    *15CandlestickData*;                                # candlestickchart/candlestickdata_p.h:21
+    *30QCandlestickModelMapperPrivate*;                 # candlestickchart/qcandlestickmodelmapper_p.h:28
+    *25QCandlestickSeriesPrivate*;                      # candlestickchart/qcandlestickseries_p.h:27
+    *22QCandlestickSetPrivate*;                         # candlestickchart/qcandlestickset_p.h:26
+    *15ChartBackground*;                                # chartbackground_p.h:26
+    *11ChartConfig*;                                    # chartconfig_p.h:21
+    *12ChartDataSet*;                                   # chartdataset_p.h:28
+    *12ChartElement*;                                   # chartelement_p.h:31
+    *9ChartItem*;                                       # chartitem_p.h:23
+    *14ChartPresenter*;                                 # chartpresenter_p.h:42
+    *17ChartThemeManager*;                              # chartthememanager_p.h:26
+    *10ChartTitle*;                                     # charttitle_p.h:22
+    *14AbstractDomain*;                                 # domain/abstractdomain_p.h:26
+    *14LogXLogYDomain*;                                 # domain/logxlogydomain_p.h:22
+    *19LogXLogYPolarDomain*;                            # domain/logxlogypolardomain_p.h:22
+    *11LogXYDomain*;                                    # domain/logxydomain_p.h:22
+    *16LogXYPolarDomain*;                               # domain/logxypolardomain_p.h:22
+    *11PolarDomain*;                                    # domain/polardomain_p.h:22
+    *11XLogYDomain*;                                    # domain/xlogydomain_p.h:22
+    *16XLogYPolarDomain*;                               # domain/xlogypolardomain_p.h:22
+    *8XYDomain*;                                        # domain/xydomain_p.h:22
+    *13XYPolarDomain*;                                  # domain/xypolardomain_p.h:21
+    *8GLWidget*;                                        # glwidget_p.h:36
+    *19AbstractChartLayout*;                            # layout/abstractchartlayout_p.h:29
+    *20CartesianChartLayout*;                           # layout/cartesianchartlayout_p.h:21
+    *16PolarChartLayout*;                               # layout/polarchartlayout_p.h:21
+    *12LegendLayout*;                                   # legend/legendlayout_p.h:24
+    *16LegendMarkerItem*;                               # legend/legendmarkeritem_p.h:30
+    *23LegendMoveResizeHandler*;                        # legend/legendmoveresizehandler_p.h:27
+    *14LegendScroller*;                                 # legend/legendscroller_p.h:24
+    *24QAreaLegendMarkerPrivate*;                       # legend/qarealegendmarker_p.h:26
+    *23QBarLegendMarkerPrivate*;                        # legend/qbarlegendmarker_p.h:27
+    *27QBoxPlotLegendMarkerPrivate*;                    # legend/qboxplotlegendmarker_p.h:26
+    *31QCandlestickLegendMarkerPrivate*;                # legend/qcandlesticklegendmarker_p.h:24
+    *14QLegendPrivate*;                                 # legend/qlegend_p.h:30
+    *20QLegendMarkerPrivate*;                           # legend/qlegendmarker_p.h:31
+    *23QPieLegendMarkerPrivate*;                        # legend/qpielegendmarker_p.h:27
+    *22QXYLegendMarkerPrivate*;                         # legend/qxylegendmarker_p.h:26
+    *13LineChartItem*;                                  # linechart/linechartitem_p.h:27
+    *18QLineSeriesPrivate*;                             # linechart/qlineseries_p.h:22
+    *12PieChartItem*;                                   # piechart/piechartitem_p.h:31
+    *6Themed*;                                          # piechart/pieslicedata_p.h:25
+    *12PieSliceData*;                                   # piechart/pieslicedata_p.h:51
+    *12PieSliceItem*;                                   # piechart/piesliceitem_p.h:33
+    *22QPieModelMapperPrivate*;                         # piechart/qpiemodelmapper_p.h:28
+    *17QPieSeriesPrivate*;                              # piechart/qpieseries_p.h:23
+    *16QPieSlicePrivate*;                               # piechart/qpieslice_p.h:24
+    *22QAbstractSeriesPrivate*;                         # qabstractseries_p.h:41
+    *13QChartPrivate*;                                  # qchart_p.h:27
+    *17QChartViewPrivate*;                              # qchartview_p.h:29
+    *21QScatterSeriesPrivate*;                          # scatterchart/qscatterseries_p.h:21
+    *16ScatterChartItem*;                               # scatterchart/scatterchartitem_p.h:28
+    *11ChartMarker*;                                    # scatterchart/scatterchartitem_p.h:91
+    *22RotatedRectangleMarker*;                         # scatterchart/scatterchartitem_p.h:108
+    *14TriangleMarker*;                                 # scatterchart/scatterchartitem_p.h:116
+    *10StarMarker*;                                     # scatterchart/scatterchartitem_p.h:124
+    *14PentagonMarker*;                                 # scatterchart/scatterchartitem_p.h:132
+    *12ScrollTicker*;                                   # scroller_p.h:32
+    *8Scroller*;                                        # scroller_p.h:47
+    *20QSplineSeriesPrivate*;                           # splinechart/qsplineseries_p.h:22
+    *15SplineChartItem*;                                # splinechart/splinechartitem_p.h:24
+    *10ChartTheme*;                                     # themes/charttheme_p.h:23
+    *22ChartThemeBlueCerulean*;                         # themes/chartthemebluecerulean_p.h:21
+    *17ChartThemeBlueIcy*;                              # themes/chartthemeblueicy_p.h:21
+    *17ChartThemeBlueNcs*;                              # themes/chartthemebluencs_p.h:21
+    *19ChartThemeBrownSand*;                            # themes/chartthemebrownsand_p.h:21
+    *14ChartThemeDark*;                                 # themes/chartthemedark_p.h:21
+    *22ChartThemeHighContrast*;                         # themes/chartthemehighcontrast_p.h:21
+    *15ChartThemeLight*;                                # themes/chartthemelight_p.h:21
+    *12ChartThemeQt*;                                   # themes/chartthemeqt_p.h:21
+    *16ChartThemeSystem*;                               # themes/chartthemesystem_p.h:25
+    *14GLXYSeriesData*;                                 # xychart/glxyseriesdata_p.h:28
+    *21GLXYSeriesDataManager*;                          # xychart/glxyseriesdata_p.h:55
+    *21QXYModelMapperPrivate*;                          # xychart/qxymodelmapper_p.h:31
+    *16QXYSeriesPrivate*;                               # xychart/qxyseries_p.h:30
+    *7XYChart*;                                         # xychart/xychart_p.h:28
+};
+Qt_6 {
+    *;
+    _ZN*18QSharedDataPointerI*D?Ev;
+    _ZN*28QExplicitlySharedDataPointerI*D?Ev;
+};
