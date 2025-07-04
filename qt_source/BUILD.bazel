@@ -6,6 +6,10 @@ QT_BASE = "qtbase-{}".format(QT_VERSION)
 
 QT_CHARTS = "qtcharts-{}".format(QT_VERSION)
 
+REPO_ROOT = package_relative_label(":BUILD.bazel").workspace_root
+
+INCLUDE_PREFIX = REPO_ROOT + "/" if REPO_ROOT else ""
+
 common_copts = [
     "-w",
     "-fPIC",
@@ -651,9 +655,6 @@ qt_internal_library(
         QT_BASE + "/src/corelib/QtCore.dynlist",
     ],
     copts = common_copts + [
-        "-Ithird_party/glib/glib",
-        "-Ithird_party/icu/include",
-        "-Ithird_party/libexecinfo",
         "-O3",
         "-U_FORTIFY_SOURCE",
         "-Wall",
@@ -959,10 +960,10 @@ cc_binary(
         QT_BASE + "/src/tools/uic/validator.cpp",
     ],
     copts = common_copts + [
-        "-Iqt_source/{}/src/tools/uic".format(QT_BASE),
-        "-Iqt_source/{}/src/tools/uic/shared".format(QT_BASE),
-        "-Iqt_source/{}/src/tools/uic/cpp".format(QT_BASE),
-        "-Iqt_source/{}/src/tools/uic/python".format(QT_BASE),
+        "-I{}qt_source/{}/src/tools/uic".format(INCLUDE_PREFIX, QT_BASE),
+        "-I{}qt_source/{}/src/tools/uic/shared".format(INCLUDE_PREFIX, QT_BASE),
+        "-I{}qt_source/{}/src/tools/uic/cpp".format(INCLUDE_PREFIX, QT_BASE),
+        "-I{}qt_source/{}/src/tools/uic/python".format(INCLUDE_PREFIX, QT_BASE),
         "-DNDEBUG",
         "-O2",
         "-Wl,-z,relro,-z,now",
@@ -1412,7 +1413,6 @@ qt_internal_library(
         "-Wno-non-virtual-dtor",
         "-Wno-string-conversion",
         "-march=core-avx2",
-        "-Ithird_party/glib/glib",
     ],
     includes = [
         QT_BASE + "/build/src/gui/Gui_autogen/",
