@@ -3,8 +3,8 @@ load("//:qt_internal_library.bzl", "qt_cc_inc_library", "qt_internal_library", "
 QT_VERSION = "6.9.1"
 
 QT_BASE = "qtbase-{}".format(QT_VERSION)
-QT_CHARTS = "qtcharts-{}".format(QT_VERSION)
 
+QT_CHARTS = "qtcharts-{}".format(QT_VERSION)
 
 common_copts = [
     "-w",
@@ -672,7 +672,6 @@ qt_internal_library(
         "-lm",
         "-shared",
         "-std=gnu++20",
-        "-std=gnu11",
     ],
     includes = [
         QT_BASE + "/build/include",
