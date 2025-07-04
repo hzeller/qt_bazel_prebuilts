@@ -673,6 +673,7 @@ qt_internal_library(
         "-lm",
         "-shared",
         "-std=gnu++20",
+        "-xc++",
     ],
     includes = [
         QT_BASE + "/build/include",
