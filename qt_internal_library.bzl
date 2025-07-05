@@ -14,6 +14,8 @@ def qt_internal_library(
         uic_srcs = [],
         deps = [],
         defines = [],
+        cxxopts = [],
+        conlyopts = [],
         copts = [],
         linkopts = [],
         linkstatic = False,
@@ -61,6 +63,8 @@ def qt_internal_library(
       uic_srcs: list of .ui files to pass through uic tool.
       deps: passed to cc_library
       defines: passed to cc_library.
+      cxxopts: passed to cc_library.
+      conlyopts: passed to cc_library
       copts: passed to cc_library.
       linkopts: passed to cc_library.
       linkstatic: passed to cc_library.
@@ -160,6 +164,8 @@ def qt_internal_library(
         name = internal_deps_lib_name,
         compatible_with = compatible_with,
         copts = copts,
+        cxxopts = cxxopts,
+        conlyopts = conlyopts,
         defines = defines + local_defines,
         includes = includes,
         textual_hdrs = hdrs,
@@ -294,6 +300,8 @@ def qt_internal_library(
         deps = deps + alwayslink_deps,
         defines = defines,
         copts = copts,
+        cxxopts = cxxopts,
+        conlyopts = conlyopts,
         linkopts = linkopts,
         linkstatic = linkstatic,
         includes = includes + [moc_out_dir, uic_out_dir],

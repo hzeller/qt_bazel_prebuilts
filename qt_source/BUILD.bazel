@@ -2097,9 +2097,9 @@ qt_internal_library(
         "-fno-exceptions",
         "-ldl",
         "-shared",
-        "-std=gnu++20",
-        "-xc++",
     ],
+    cxxopts = ["-std=gnu++20"],
+    conlyopts = ["-std=gnu11"],
     includes = common_includes + [
         QT_BASE + "/build/include",
         QT_BASE + "/build/include",
