@@ -3,6 +3,6 @@
 #  include <QtCore/QtCore>
 #  include <QtGui/QtGui>
 #  include <QtWidgets/QtWidgets>
-#  include <QtOpenGL/QtOpenGL>
-#  include <QtOpenGLWidgets/QtOpenGLWidgets>
+//#  include <QtOpenGL/QtOpenGL>
+//#  include <QtOpenGLWidgets/QtOpenGLWidgets>
 #endif
