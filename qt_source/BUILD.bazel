@@ -998,6 +998,7 @@ cc_binary(
         ":common_headers",
         ":core",
     ],
+    visibility = ["//visibility:public",]
 )
 
 qt_internal_library(
