@@ -875,6 +875,7 @@ cc_binary(
     deps = [
         ":core",
     ],
+    visibility = ["//visibility:public",]
 )
 
 qt_internal_library(
