@@ -344,6 +344,7 @@ cc_binary(
     copts = common_copts,
     includes = common_includes + [],
     linkstatic = True,
+    visibility = ["//visibility:public"],
     deps = [
         ":bootstrap",
         ":common_headers",
@@ -872,10 +873,10 @@ cc_binary(
         "_LARGEFILE64_SOURCE",
         "_LARGEFILE_SOURCE",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":core",
     ],
-    visibility = ["//visibility:public",]
 )
 
 qt_internal_library(
@@ -994,11 +995,11 @@ cc_binary(
         "_LARGEFILE64_SOURCE",
         "_LARGEFILE_SOURCE",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":common_headers",
         ":core",
     ],
-    visibility = ["//visibility:public",]
 )
 
 qt_internal_library(
@@ -2076,6 +2077,7 @@ qt_internal_library(
         QT_BASE + "/src/plugins/platforms/xcb/*",
         QT_BASE + "/src/plugins/platforms/xcb/gl_integrations/*",
     ]),
+    conlyopts = ["-std=gnu11"],
     copts = common_copts + [
         "-DNDEBUG",
         "-D_FORTIFY_SOURCE=3",
@@ -2101,7 +2103,6 @@ qt_internal_library(
         "-shared",
     ],
     cxxopts = ["-std=gnu++20"],
-    conlyopts = ["-std=gnu11"],
     includes = common_includes + [
         QT_BASE + "/build/include",
         QT_BASE + "/build/include",
