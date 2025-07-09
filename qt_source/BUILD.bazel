@@ -657,7 +657,7 @@ qt_internal_library(
         QT_BASE + "/src/corelib/QtCore.dynlist",
     ],
     copts = common_copts + [
-        "-O3",
+        "-O2",
         "-U_FORTIFY_SOURCE",
         "-Wall",
         "-Wextra",
@@ -1395,7 +1395,7 @@ qt_internal_library(
     copts = [
         "-fPIC",
         "-DNDEBUG",
-        "-O3",
+        "-O2",
         "-Wl,-Bsymbolic-functions",
         "-Wl,--no-undefined",
         "-Wl,-z,relro,-z,now",
