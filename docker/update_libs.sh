@@ -68,7 +68,7 @@ mkdir -p "${DEST_DIR}"
 # Delete all files that are not BUILD files or .bzl files.
 find "${DEST_DIR}" -type f -not -name 'BUILD' -not -name '*.bazel' -delete
 # Delete empty directories
-#find "${DEST_DIR}" -mindepth 1 -type d -empty -delete
+find "${DEST_DIR}" -mindepth 1 -type d -empty -delete
 
 
 # 7. Sync the new libraries from the temporary location to the destination.
@@ -76,6 +76,6 @@ echo "Syncing new libraries to ${DEST_DIR}..."
 # -a: archive mode (preserves permissions, etc.)
 # -r: recursive
 # The trailing slash on the source is important to copy contents.
-#rsync -ar "${EXTRACTED_LIBS_DIR}/" "${DEST_DIR}/"
+rsync -ar "${EXTRACTED_LIBS_DIR}/" "${DEST_DIR}/"
 
 echo "Successfully updated interface libraries."
