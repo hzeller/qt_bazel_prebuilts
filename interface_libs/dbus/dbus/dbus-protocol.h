@@ -4,8 +4,6 @@
  * Copyright (C) 2002, 2003  CodeFactory AB
  * Copyright (C) 2004, 2005 Red Hat, Inc.
  *
- * SPDX-License-Identifier: AFL-2.1 OR GPL-2.0-or-later
- *
  * Licensed under the Academic Free License version 2.1
  *
  * This program is free software; you can redistribute it and/or modify
@@ -302,10 +300,6 @@ extern "C" {
  * with this message.
  */
 #define DBUS_HEADER_FIELD_UNIX_FDS       9
-/**
- * Header field code for the container instance that sent this message.
- */
-#define DBUS_HEADER_FIELD_CONTAINER_INSTANCE 10
 
 
 /**
@@ -314,7 +308,7 @@ extern "C" {
  * that unknown codes must be ignored, so check for that before
  * indexing the array.
  */
-#define DBUS_HEADER_FIELD_LAST DBUS_HEADER_FIELD_CONTAINER_INSTANCE
+#define DBUS_HEADER_FIELD_LAST DBUS_HEADER_FIELD_UNIX_FDS
 
 /** Header format is defined as a signature:
  *   byte                            byte order
@@ -440,7 +434,7 @@ extern "C" {
 #define DBUS_ERROR_SPAWN_PERMISSIONS_INVALID  "org.freedesktop.DBus.Error.Spawn.PermissionsInvalid"
 /** Service file invalid (Name, User or Exec missing). */
 #define DBUS_ERROR_SPAWN_FILE_INVALID         "org.freedesktop.DBus.Error.Spawn.FileInvalid"
-/** There was not enough memory to complete the operation. */
+/** Tried to get a UNIX process ID and it wasn't available. */
 #define DBUS_ERROR_SPAWN_NO_MEMORY            "org.freedesktop.DBus.Error.Spawn.NoMemory"
 /** Tried to get a UNIX process ID and it wasn't available. */
 #define DBUS_ERROR_UNIX_PROCESS_ID_UNKNOWN    "org.freedesktop.DBus.Error.UnixProcessIdUnknown"
@@ -450,6 +444,8 @@ extern "C" {
 #define DBUS_ERROR_INVALID_FILE_CONTENT       "org.freedesktop.DBus.Error.InvalidFileContent"
 /** Asked for SELinux security context and it wasn't available. */
 #define DBUS_ERROR_SELINUX_SECURITY_CONTEXT_UNKNOWN    "org.freedesktop.DBus.Error.SELinuxSecurityContextUnknown"
+/** Asked for AppArmor security context and it wasn't available. */
+#define DBUS_ERROR_APPARMOR_SECURITY_CONTEXT_UNKNOWN   "org.freedesktop.DBus.Error.AppArmorSecurityContextUnknown"
 /** Asked for ADT audit data and it wasn't available. */
 #define DBUS_ERROR_ADT_AUDIT_DATA_UNKNOWN     "org.freedesktop.DBus.Error.AdtAuditDataUnknown"
 /** There's already an object with the requested object path. */
@@ -461,9 +457,6 @@ extern "C" {
  * but could have succeeded if an interactive authorization step was
  * allowed. */
 #define DBUS_ERROR_INTERACTIVE_AUTHORIZATION_REQUIRED "org.freedesktop.DBus.Error.InteractiveAuthorizationRequired"
-/** The connection is not from a container, or the specified container instance
- * does not exist. */
-#define DBUS_ERROR_NOT_CONTAINER "org.freedesktop.DBus.Error.NotContainer"
 
 /* XML introspection format */
 

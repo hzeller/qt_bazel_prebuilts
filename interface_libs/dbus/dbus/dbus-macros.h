@@ -3,10 +3,8 @@
  *
  * Copyright (C) 2002  Red Hat Inc.
  *
- * SPDX-License-Identifier: AFL-2.1 OR GPL-2.0-or-later
- *
  * Licensed under the Academic Free License version 2.1
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -94,24 +92,10 @@
 #define DBUS_ALLOC_SIZE2(x,y)
 #endif
 
-/** @def _DBUS_WARN_UNUSED_RESULT
- *
- * An attribute for functions whose result must be checked by the caller.
- *
- * This macro is used in function declarations. Unlike gcc-specific
- * attributes, to avoid compilation failure with MSVC it must appear
- * somewhere before the function name in the declaration. Our preferred
- * coding style is to place it before the return type, for example:
- *
- * DBUS_PRIVATE_EXPORT _DBUS_WARN_UNUSED_RESULT
- * dbus_bool_t _dbus_user_database_lock_system (void);
- */
-#if     defined(_MSC_VER) && (_MSC_VER >= 1700)
-#define _DBUS_WARN_UNUSED_RESULT _Must_inspect_result_
-#elif    (__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
-#define _DBUS_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+#if    (__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define _DBUS_GNUC_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 #else
-#define _DBUS_WARN_UNUSED_RESULT
+#define _DBUS_GNUC_WARN_UNUSED_RESULT
 #endif
 
 /** @def _DBUS_GNUC_PRINTF
@@ -119,6 +103,9 @@
  */
 /** @def _DBUS_GNUC_NORETURN
  * used to tell gcc about functions that never return, such as _dbus_abort()
+ */
+/** @def _DBUS_GNUC_WARN_UNUSED_RESULT
+ * used to tell gcc about functions whose result must be used
  */
 
 /* Normally docs are in .c files, but there isn't a .c file for this. */
@@ -210,6 +197,22 @@
 #  define DBUS_EXPORT __attribute__ ((__visibility__ ("default")))
 #else
 #define DBUS_EXPORT
+#endif
+
+#if defined(DBUS_PRIVATE_EXPORT)
+  /* value forced by compiler command line, don't redefine */
+#elif defined(_WIN32)
+#  if defined(DBUS_STATIC_BUILD)
+#    define DBUS_PRIVATE_EXPORT /* no decoration */
+#  elif defined(dbus_1_EXPORTS)
+#    define DBUS_PRIVATE_EXPORT __declspec(dllexport)
+#  else
+#    define DBUS_PRIVATE_EXPORT __declspec(dllimport)
+#  endif
+#elif defined(__GNUC__) && __GNUC__ >= 4
+#  define DBUS_PRIVATE_EXPORT __attribute__ ((__visibility__ ("default")))
+#else
+#  define DBUS_PRIVATE_EXPORT /* no decoration */
 #endif
 
 /* Implementation for dbus_clear_message() etc. This is not API,

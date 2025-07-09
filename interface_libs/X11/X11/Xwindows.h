@@ -72,8 +72,6 @@ The Open Group.
 #define ATOM wATOM
 #define BYTE wBYTE
 #define FreeResource wFreeResource
-#pragma push_macro ("ControlMask")
-#undef ControlMask
 #include <windows.h>
 #undef NOMINMAX
 #undef Status
@@ -85,7 +83,6 @@ The Open Group.
 #undef LONG64
 #undef ATOM
 #undef FreeResource
-#pragma pop_macro ("ControlMask")
 #undef CreateWindowA
 
 /*

@@ -3,10 +3,8 @@
  *
  * Copyright (C) 2002, 2003, 2005 Red Hat Inc.
  *
- * SPDX-License-Identifier: AFL-2.1 OR GPL-2.0-or-later
- *
  * Licensed under the Academic Free License version 2.1
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -61,10 +59,7 @@ typedef struct DBusMessageIter DBusMessageIter;
  * DBusMessageIter struct; contains no public fields. 
  */
 struct DBusMessageIter
-{
-#if DBUS_SIZEOF_VOID_P > 8
-  void *dummy[16];      /**< Don't use this */
-#else
+{ 
   void *dummy1;         /**< Don't use this */
   void *dummy2;         /**< Don't use this */
   dbus_uint32_t dummy3; /**< Don't use this */
@@ -79,24 +74,12 @@ struct DBusMessageIter
   int pad1;             /**< Don't use this */
   void *pad2;           /**< Don't use this */
   void *pad3;           /**< Don't use this */
-#endif
 };
 
 /**
  * A message iterator for which dbus_message_iter_abandon_container_if_open()
  * is the only valid operation.
  */
-#if DBUS_SIZEOF_VOID_P > 8
-#define DBUS_MESSAGE_ITER_INIT_CLOSED \
-{ \
-  { \
-    NULL, NULL, NULL, NULL, \
-    NULL, NULL, NULL, NULL, \
-    NULL, NULL, NULL, NULL, \
-    NULL, NULL, NULL, NULL \
-  } \
-}
-#else
 #define DBUS_MESSAGE_ITER_INIT_CLOSED \
 { \
   NULL, /* dummy1 */ \
@@ -114,7 +97,6 @@ struct DBusMessageIter
   NULL, /* pad2 */ \
   NULL /* pad3 */ \
 }
-#endif
 
 DBUS_EXPORT
 DBusMessage* dbus_message_new               (int          message_type);
@@ -234,12 +216,6 @@ dbus_bool_t   dbus_message_get_auto_start   (DBusMessage   *message);
 DBUS_EXPORT
 dbus_bool_t   dbus_message_get_path_decomposed (DBusMessage   *message,
                                                 char        ***path);
-
-DBUS_EXPORT
-const char   *dbus_message_get_container_instance (DBusMessage   *message);
-DBUS_EXPORT
-dbus_bool_t   dbus_message_set_container_instance (DBusMessage   *message,
-                                                   const char    *object_path);
 
 DBUS_EXPORT
 dbus_bool_t dbus_message_append_args          (DBusMessage     *message,

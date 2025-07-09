@@ -52,8 +52,6 @@ The Open Group.
 #define ATOM wATOM
 #define BYTE wBYTE
 #define FreeResource wFreeResource
-#pragma push_macro ("ControlMask")
-#undef ControlMask
 #include <winsock2.h>
 #undef Status
 #define Status int
@@ -62,7 +60,6 @@ The Open Group.
 #undef INT32
 #undef ATOM
 #undef FreeResource
-#pragma pop_macro ("ControlMask")
 #undef CreateWindowA
 #undef RT_FONT
 #undef RT_CURSOR

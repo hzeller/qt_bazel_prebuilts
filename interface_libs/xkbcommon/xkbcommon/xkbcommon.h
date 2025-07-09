@@ -169,37 +169,28 @@ typedef uint32_t xkb_keycode_t;
  *
  * A key, represented by a keycode, may generate different symbols according
  * to keyboard state.  For example, on a QWERTY keyboard, pressing the key
- * labled \<A\> generates the symbol ‘a’.  If the Shift key is held, it
- * generates the symbol ‘A’.  If a different layout is used, say Greek,
- * it generates the symbol ‘α’.  And so on.
+ * labled \<A\> generates the symbol 'a'.  If the Shift key is held, it
+ * generates the symbol 'A'.  If a different layout is used, say Greek,
+ * it generates the symbol 'α'.  And so on.
  *
- * Each such symbol is represented by a *keysym* (short for “key symbol”).
- * Note that keysyms are somewhat more general, in that they can also represent
- * some “function”, such as “Left” or “Right” for the arrow keys.  For more
- * information, see: Appendix A [“KEYSYM Encoding”][encoding] of the X Window
- * System Protocol.
+ * Each such symbol is represented by a keysym.  Note that keysyms are
+ * somewhat more general, in that they can also represent some "function",
+ * such as "Left" or "Right" for the arrow keys.  For more information,
+ * see:
+ * https://www.x.org/releases/current/doc/xproto/x11protocol.html#keysym_encoding
  *
  * Specifically named keysyms can be found in the
  * xkbcommon/xkbcommon-keysyms.h header file.  Their name does not include
- * the `XKB_KEY_` prefix.
+ * the XKB_KEY_ prefix.
  *
- * Besides those, any Unicode/ISO&nbsp;10646 character in the range U+0100 to
- * U+10FFFF can be represented by a keysym value in the range 0x01000100 to
- * 0x0110FFFF.  The name of Unicode keysyms is `U<codepoint>`, e.g. `UA1B2`.
+ * Besides those, any Unicode/ISO 10646 character in the range U0100 to
+ * U10FFFF can be represented by a keysym value in the range 0x01000100 to
+ * 0x0110FFFF.  The name of Unicode keysyms is "U<codepoint>", e.g. "UA1B2".
  *
  * The name of other unnamed keysyms is the hexadecimal representation of
- * their value, e.g. `0xabcd1234`.
+ * their value, e.g. "0xabcd1234".
  *
  * Keysym names are case-sensitive.
- *
- * @note **Encoding:** Keysyms are 32-bit integers with the 3 most significant
- * bits always set to zero.  See: Appendix A [“KEYSYM Encoding”][encoding] of
- * the X Window System Protocol.
- *
- * [encoding]: https://www.x.org/releases/current/doc/xproto/x11protocol.html#keysym_encoding
- *
- * @ingroup keysyms
- * @sa XKB_KEYSYM_MAX
  */
 typedef uint32_t xkb_keysym_t;
 
@@ -216,15 +207,6 @@ typedef uint32_t xkb_keysym_t;
  * guaranteed to be unique (though they are usually provided and unique).
  * Therefore, it is not safe to use the name as a unique identifier for a
  * layout.  Layout names are case-sensitive.
- *
- * Layout names are specified in the layout's definition, for example
- * "English (US)".  These are different from the (conventionally) short names
- * which are used to locate the layout, for example "us" or "us(intl)".  These
- * names are not present in a compiled keymap.
- *
- * If the user selects layouts from a list generated from the XKB registry
- * (using libxkbregistry or directly), and this metadata is needed later on, it
- * is recommended to store it along with the keymap.
  *
  * Layouts are also called "groups" by XKB.
  *
@@ -313,15 +295,6 @@ typedef uint32_t xkb_led_mask_t;
 #define XKB_KEYCODE_MAX     (0xffffffff - 1)
 
 /**
- * Maximum keysym value
- *
- * @since 1.6.0
- * @sa xkb_keysym_t
- * @ingroup keysyms
- */
-#define XKB_KEYSYM_MAX      0x1fffffff
-
-/**
  * Test whether a value is a valid extended keycode.
  * @sa xkb_keycode_t
  **/
@@ -373,9 +346,6 @@ struct xkb_rule_names {
      * A comma separated list of variants, one per layout, which may
      * modify or augment the respective layout in various ways.
      *
-     * Generally, should either be empty or have the same number of values
-     * as the number of layouts. You may use empty values as in "intl,,neo".
-     *
      * If NULL or the empty string "", and a default value is also used
      * for the layout, a default value is used.  Otherwise no variant is
      * used.
@@ -398,7 +368,7 @@ struct xkb_rule_names {
 
 /**
  * @defgroup keysyms Keysyms
- * Utility functions related to *keysyms* (short for “key symbols”).
+ * Utility functions related to keysyms.
  *
  * @{
  */
@@ -472,7 +442,7 @@ enum xkb_keysym_flags {
  * invalid flags are passed, this will fail with XKB_KEY_NoSymbol.
  *
  * If you use the XKB_KEYSYM_CASE_INSENSITIVE flag and two keysym names
- * differ only by case, then the lower-case keysym name is returned.  For
+ * differ only by case, then the lower-case keysym is returned.  For
  * instance, for KEY_a and KEY_A, this function would return KEY_a for the
  * case-insensitive search.  If this functionality is needed, it is
  * recommended to first call this function without this flag; and if that
@@ -524,29 +494,6 @@ uint32_t
 xkb_keysym_to_utf32(xkb_keysym_t keysym);
 
 /**
- * Get the keysym corresponding to a Unicode/UTF-32 codepoint.
- *
- * @returns The keysym corresponding to the specified Unicode
- * codepoint, or XKB_KEY_NoSymbol if there is none.
- *
- * This function is the inverse of @ref xkb_keysym_to_utf32. In cases
- * where a single codepoint corresponds to multiple keysyms, returns
- * the keysym with the lowest value.
- *
- * Unicode codepoints which do not have a special (legacy) keysym
- * encoding use a direct encoding scheme. These keysyms don't usually
- * have an associated keysym constant (XKB_KEY_*).
- *
- * For noncharacter Unicode codepoints and codepoints outside of the
- * defined Unicode planes this function returns XKB_KEY_NoSymbol.
- *
- * @sa xkb_keysym_to_utf32()
- * @since 1.0.0
- */
-xkb_keysym_t
-xkb_utf32_to_keysym(uint32_t ucs);
-
-/**
  * Convert a keysym to its uppercase form.
  *
  * If there is no such form, the keysym is returned unchanged.
@@ -583,7 +530,7 @@ xkb_keysym_to_lower(xkb_keysym_t ks);
  *
  * The user may set some environment variables which affect the library:
  *
- * - `XKB_CONFIG_ROOT`, `XKB_CONFIG_EXTRA_PATH`, `XDG_CONFIG_DIR`, `HOME` - see @ref include-path.
+ * - `XKB_CONFIG_ROOT`, `XDG_CONFIG_DIR`, `HOME` - see @ref include-path.
  * - `XKB_LOG_LEVEL` - see xkb_context_set_log_level().
  * - `XKB_LOG_VERBOSITY` - see xkb_context_set_log_verbosity().
  * - `XKB_DEFAULT_RULES`, `XKB_DEFAULT_MODEL`, `XKB_DEFAULT_LAYOUT`,
@@ -598,17 +545,9 @@ enum xkb_context_flags {
     XKB_CONTEXT_NO_DEFAULT_INCLUDES = (1 << 0),
     /**
      * Don't take RMLVO names from the environment.
-     *
      * @since 0.3.0
      */
-    XKB_CONTEXT_NO_ENVIRONMENT_NAMES = (1 << 1),
-    /**
-     * Disable the use of secure_getenv for this context, so that privileged
-     * processes can use environment variables. Client uses at their own risk.
-     *
-     * @since 1.5.0
-     */
-    XKB_CONTEXT_NO_SECURE_GETENV = (1 << 2)
+    XKB_CONTEXT_NO_ENVIRONMENT_NAMES = (1 << 1)
 };
 
 /**
@@ -682,9 +621,6 @@ xkb_context_get_user_data(struct xkb_context *context);
  *   fallback to `$HOME/.config/` if unset.
  * - The path `$HOME/.xkb`, where $HOME is the value of the environment
  *   variable `HOME`.
- * - The `XKB_CONFIG_EXTRA_PATH` environment variable, if defined, otherwise the
- *   system configuration directory, defined at library configuration time
- *   (usually `/etc/xkb`).
  * - The `XKB_CONFIG_ROOT` environment variable, if defined, otherwise
  *   the system XKB root, defined at library configuration time.
  *
@@ -1125,7 +1061,6 @@ xkb_keymap_num_layouts(struct xkb_keymap *keymap);
  * a name, returns NULL.
  *
  * @sa xkb_layout_index_t
- *     For notes on layout names.
  * @memberof xkb_keymap
  */
 const char *
@@ -1138,8 +1073,6 @@ xkb_keymap_layout_get_name(struct xkb_keymap *keymap, xkb_layout_index_t idx);
  * XKB_LAYOUT_INVALID.  If more than one layout in the keymap has this name,
  * returns the lowest index among them.
  *
- * @sa xkb_layout_index_t
- *     For notes on layout names.
  * @memberof xkb_keymap
  */
 xkb_layout_index_t
@@ -1208,50 +1141,6 @@ xkb_keymap_num_levels_for_key(struct xkb_keymap *keymap, xkb_keycode_t key,
                               xkb_layout_index_t layout);
 
 /**
- * Retrieves every possible modifier mask that produces the specified
- * shift level for a specific key and layout.
- *
- * This API is useful for inverse key transformation; i.e. finding out
- * which modifiers need to be active in order to be able to type the
- * keysym(s) corresponding to the specific key code, layout and level.
- *
- * @warning It returns only up to masks_size modifier masks. If the
- * buffer passed is too small, some of the possible modifier combinations
- * will not be returned.
- *
- * @param[in] keymap      The keymap.
- * @param[in] key         The keycode of the key.
- * @param[in] layout      The layout for which to get modifiers.
- * @param[in] level       The shift level in the layout for which to get the
- * modifiers. This should be smaller than:
- * @code xkb_keymap_num_levels_for_key(keymap, key) @endcode
- * @param[out] masks_out  A buffer in which the requested masks should be
- * stored.
- * @param[out] masks_size The number of elements in the buffer pointed to by
- * masks_out.
- *
- * If @c layout is out of range for this key (that is, larger or equal to
- * the value returned by xkb_keymap_num_layouts_for_key()), it is brought
- * back into range in a manner consistent with xkb_state_key_get_layout().
- *
- * @returns The number of modifier masks stored in the masks_out array.
- * If the key is not in the keymap or if the specified shift level cannot
- * be reached it returns 0 and does not modify the masks_out buffer.
- *
- * @sa xkb_level_index_t
- * @sa xkb_mod_mask_t
- * @memberof xkb_keymap
- * @since 1.0.0
- */
-size_t
-xkb_keymap_key_get_mods_for_level(struct xkb_keymap *keymap,
-                                  xkb_keycode_t key,
-                                  xkb_layout_index_t layout,
-                                  xkb_level_index_t level,
-                                  xkb_mod_mask_t *masks_out,
-                                  size_t masks_size);
-
-/**
  * Get the keysyms obtained from pressing a key in a given layout and
  * shift level.
  *
@@ -1263,7 +1152,7 @@ xkb_keymap_key_get_mods_for_level(struct xkb_keymap *keymap,
  * @param[in] key       The keycode of the key.
  * @param[in] layout    The layout for which to get the keysyms.
  * @param[in] level     The shift level in the layout for which to get the
- * keysyms. This should be smaller than:
+ * keysyms. This must be smaller than:
  * @code xkb_keymap_num_levels_for_key(keymap, key) @endcode
  * @param[out] syms_out An immutable array of keysyms corresponding to the
  * key in the given layout and shift level.
@@ -1360,33 +1249,6 @@ xkb_state_unref(struct xkb_state *state);
 struct xkb_keymap *
 xkb_state_get_keymap(struct xkb_state *state);
 
-/**
- * @page server-client-state Server State and Client State
- * @parblock
- *
- * The xkb_state API is used by two distinct actors in most window-system
- * architectures:
- *
- * 1. A *server* - for example, a Wayland compositor, an X11 server, an evdev
- *    listener.
- *
- *    Servers maintain the XKB state for a device according to input events from
- *    the device, such as key presses and releases, and out-of-band events from
- *    the user, like UI layout switchers.
- *
- * 2. A *client* - for example, a Wayland client, an X11 client.
- *
- *    Clients do not listen to input from the device; instead, whenever the
- *    server state changes, the server serializes the state and notifies the
- *    clients that the state has changed; the clients then update the state
- *    from the serialization.
- *
- * Some entry points in the xkb_state API are only meant for servers and some
- * are only meant for clients, and the two should generally not be mixed.
- *
- * @endparblock
- */
-
 /** Specifies the direction of the key (press / release). */
 enum xkb_key_direction {
     XKB_KEY_UP,   /**< The key was released. */
@@ -1433,8 +1295,11 @@ enum xkb_state_component {
  * Update the keyboard state to reflect a given key being pressed or
  * released.
  *
- * This entry point is intended for *server* applications and should not be used
- * by *client* applications; see @ref server-client-state for details.
+ * This entry point is intended for programs which track the keyboard state
+ * explicitly (like an evdev client).  If the state is serialized to you by
+ * a master process (like a Wayland compositor) using functions like
+ * xkb_state_serialize_mods(), you should use xkb_state_update_mask() instead.
+ * The two functions should not generally be used together.
  *
  * A series of calls to this function should be consistent; that is, a call
  * with XKB_KEY_DOWN for a key should be matched by an XKB_KEY_UP; if a key
@@ -1462,16 +1327,21 @@ xkb_state_update_key(struct xkb_state *state, xkb_keycode_t key,
 /**
  * Update a keyboard state from a set of explicit masks.
  *
- * This entry point is intended for *client* applications; see @ref
- * server-client-state for details. *Server* applications should use
- * xkb_state_update_key() instead.
+ * This entry point is intended for window systems and the like, where a
+ * master process holds an xkb_state, then serializes it over a wire
+ * protocol, and clients then use the serialization to feed in to their own
+ * xkb_state.
  *
  * All parameters must always be passed, or the resulting state may be
  * incoherent.
  *
  * The serialization is lossy and will not survive round trips; it must only
- * be used to feed client state objects, and must not be used to update the
- * server state.
+ * be used to feed slave state objects, and must not be used to update the
+ * master state.
+ *
+ * If you do not fit the description above, you should use
+ * xkb_state_update_key() instead.  The two functions should not generally be
+ * used together.
  *
  * @returns A mask of state components that have changed as a result of
  * the update.  If nothing in the state has changed, returns 0.
@@ -1649,10 +1519,6 @@ enum xkb_state_match {
  * The counterpart to xkb_state_update_mask for modifiers, to be used on
  * the server side of serialization.
  *
- * This entry point is intended for *server* applications; see @ref
- * server-client-state for details. *Client* applications should use the
- * xkb_state_mod_*_is_active API.
- *
  * @param state      The keyboard state.
  * @param components A mask of the modifier state components to serialize.
  * State components other than XKB_STATE_MODS_* are ignored.
@@ -1661,6 +1527,9 @@ enum xkb_state_match {
  *
  * @returns A xkb_mod_mask_t representing the given components of the
  * modifier state.
+ *
+ * This function should not be used in regular clients; please use the
+ * xkb_state_mod_*_is_active API instead.
  *
  * @memberof xkb_state
  */
@@ -1672,10 +1541,6 @@ xkb_state_serialize_mods(struct xkb_state *state,
  * The counterpart to xkb_state_update_mask for layouts, to be used on
  * the server side of serialization.
  *
- * This entry point is intended for *server* applications; see @ref
- * server-client-state for details. *Client* applications should use the
- * xkb_state_layout_*_is_active API.
- *
  * @param state      The keyboard state.
  * @param components A mask of the layout state components to serialize.
  * State components other than XKB_STATE_LAYOUT_* are ignored.
@@ -1684,6 +1549,9 @@ xkb_state_serialize_mods(struct xkb_state *state,
  *
  * @returns A layout index representing the given components of the
  * layout state.
+ *
+ * This function should not be used in regular clients; please use the
+ * xkb_state_layout_*_is_active API instead.
  *
  * @memberof xkb_state
  */

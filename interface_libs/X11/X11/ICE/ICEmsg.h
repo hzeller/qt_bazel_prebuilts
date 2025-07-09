@@ -33,11 +33,6 @@ Author: Ralph Mor, X Consortium
 
 #include <X11/ICE/ICEconn.h>
 
-#include <assert.h>
-#if !defined(__cplusplus) && !defined(static_assert)
-#define static_assert(cond, msg) /* skip for non-C11 compilers */
-#endif
-
 _XFUNCPROTOBEGIN
 
 /*
@@ -128,9 +123,6 @@ extern IcePaAuthStatus _IcePaMagicCookie1Proc (
  */
 
 #define IceGetHeader(_iceConn, _major, _minor, _headerSize, _msgType, _pMsg) \
-do { \
-    static_assert(_headerSize <= 1024, \
-                  "Header size larger than ICE_OUTBUFSIZE"); \
     if ((_iceConn->outbufptr + _headerSize) > _iceConn->outbufmax) \
         IceFlush (_iceConn); \
     _pMsg = (_msgType *) _iceConn->outbufptr; \
@@ -138,29 +130,23 @@ do { \
     _pMsg->minorOpcode = _minor; \
     _pMsg->length = (_headerSize - SIZEOF (iceMsg)) >> 3; \
     _iceConn->outbufptr += _headerSize; \
-    _iceConn->send_sequence++; \
-} while (0)
+    _iceConn->send_sequence++
 
 #define IceGetHeaderExtra(_iceConn, _major, _minor, _headerSize, _extra, _msgType, _pMsg, _pData) \
-do { \
-    static_assert(_headerSize <= 1024, \
-                  "Header size larger than ICE_OUTBUFSIZE"); \
     if ((_iceConn->outbufptr + \
 	_headerSize + ((_extra) << 3)) > _iceConn->outbufmax) \
         IceFlush (_iceConn); \
     _pMsg = (_msgType *) _iceConn->outbufptr; \
-    _iceConn->outbufptr += _headerSize; \
-    if ((_iceConn->outbufptr + ((_extra) << 3)) <= _iceConn->outbufmax) { \
-        _pData = _iceConn->outbufptr; \
-        _iceConn->outbufptr += ((_extra) << 3); \
-    } \
+    if ((_iceConn->outbufptr + \
+	_headerSize + ((_extra) << 3)) <= _iceConn->outbufmax) \
+        _pData = (char *) _pMsg + _headerSize; \
     else \
         _pData = NULL; \
     _pMsg->majorOpcode = _major; \
     _pMsg->minorOpcode = _minor; \
     _pMsg->length = ((_headerSize - SIZEOF (iceMsg)) >> 3) + (_extra); \
-    _iceConn->send_sequence++; \
-} while (0)
+    _iceConn->outbufptr += (_headerSize + ((_extra) << 3)); \
+    _iceConn->send_sequence++
 
 #define IceSimpleMessage(_iceConn, _major, _minor) \
 { \
@@ -292,7 +278,7 @@ do { \
 
 /*
  * Read pad bytes (for 32 or 64 bit alignment).
- * A maximum of 7 pad bytes can be specified.
+ * A maxium of 7 pad bytes can be specified.
  */
 
 #define IceReadPad(_iceConn, _bytes) \

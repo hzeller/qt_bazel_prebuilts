@@ -1,4 +1,3 @@
-
 cc_import(
     name = "xcb_randr_ifso",
     interface_library = "libxcb-randr.ifso",
@@ -77,6 +76,12 @@ cc_import(
     system_provided = True,
 )
 
+cc_import(
+    name = "xcb_util_ifso",
+    interface_library = "libxcb-util.ifso",
+    system_provided = True,
+)
+
 cc_library(
     name = "xcb",
     hdrs = glob(["xcb/*.h"]),
@@ -84,18 +89,19 @@ cc_library(
     strip_include_prefix = ".",
     visibility = ["//qt_source:__subpackages__"],
     deps = [
-        ":xcb_randr_ifso",
-        ":xcb_xfixes_ifso",
-        ":xcb_sync_ifso",
-        ":xcb_xkb_ifso",
-        ":xcb_keysyms_ifso",
+        ":xcb_cursor_ifso",
         ":xcb_icccm_ifso",
         ":xcb_ifso",
-        ":xcb_shape_ifso",
-        ":xcb_render_ifso",
         ":xcb_image_ifso",
-        ":xcb_shm_ifso",
-        ":xcb_cursor_ifso",
+        ":xcb_keysyms_ifso",
+        ":xcb_randr_ifso",
+        ":xcb_render_ifso",
         ":xcb_render_util_ifso",
+        ":xcb_shape_ifso",
+        ":xcb_shm_ifso",
+        ":xcb_sync_ifso",
+        ":xcb_util_ifso",
+        ":xcb_xfixes_ifso",
+        ":xcb_xkb_ifso",
     ],
 )

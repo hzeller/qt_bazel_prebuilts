@@ -52,7 +52,7 @@ WORKDIR /tmp
 # Build IFSO and libs
 RUN mkdir -p interface_libs/xcb && \
     cp -r /usr/include/xcb interface_libs/xcb && \
-    for lib in /usr/lib/x86_64-linux-gnu/libxcb-*.so; do \
+    for lib in /usr/lib/x86_64-linux-gnu/libxcb*.so; do \
        llvm-ifs-20 --output-elf "/tmp/interface_libs/xcb/$(basename "$lib" .so).ifso" "$lib"; \
     done &&\
     mkdir -p interface_libs/xkbcommon && \
@@ -67,6 +67,7 @@ RUN mkdir -p interface_libs/xcb && \
     done && \
     mkdir -p interface_libs/dbus && \
     cp -r /usr/include/dbus-1.0/dbus interface_libs/dbus && \
+    cp /usr/lib/x86_64-linux-gnu/dbus-1.0/include/dbus/dbus-arch-deps.h interface_libs/dbus/dbus && \
     for lib in /usr/lib/x86_64-linux-gnu/libdbus*.so; do \
        llvm-ifs-20 --output-elf "/tmp/interface_libs/dbus/$(basename "$lib" .so).ifso" "$lib"; \
     done && \

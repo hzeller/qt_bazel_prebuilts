@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Oracle and/or its affiliates.
+ * Copyright (c) 2006, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2010 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -48,7 +48,7 @@
 #define _XFIXESWIRE_H_
 
 #define XFIXES_NAME	"XFIXES"
-#define XFIXES_MAJOR	6
+#define XFIXES_MAJOR	5
 #define XFIXES_MINOR	0
 
 /*************** Version 1 ******************/
@@ -89,11 +89,8 @@
 /*************** Version 5 ******************/
 #define X_XFixesCreatePointerBarrier	    31
 #define X_XFixesDestroyPointerBarrier	    32
-/*************** Version 6 ******************/
-#define X_XFixesSetClientDisconnectMode	    33
-#define X_XFixesGetClientDisconnectMode	    34
 
-#define XFixesNumberRequests		    (X_XFixesGetClientDisconnectMode+1)
+#define XFixesNumberRequests		    (X_XFixesDestroyPointerBarrier+1)
 
 /* Selection events share one event number */
 #define XFixesSelectionNotify		    0
@@ -138,17 +135,5 @@
 #define BarrierPositiveY		    (1L << 1)
 #define BarrierNegativeX		    (1L << 2)
 #define BarrierNegativeY		    (1L << 3)
-
-/*************** Version 6 ******************/
-
-/* The default server behaviour */
-#define XFixesClientDisconnectFlagDefault   0
-/* The server may disconnect this client to shut down */
-#define XFixesClientDisconnectFlagTerminate  (1L << 0)
-
-/*************** Version 6.1 ******************/
-
-/* The server must terminate if this client exits */
-#define XFixesClientDisconnectFlagForceTerminate  (1L << 1)
 
 #endif	/* _XFIXESWIRE_H_ */
