@@ -19,7 +19,7 @@ TEMP_DIR=$(mktemp -d -t ci-XXXXXXXXXX)
 
 # Ensure cleanup happens on script exit
 trap "rm -rf '${TEMP_DIR}'" EXIT
-trap "rm '${SRC_DIR}'" EXIT
+trap "rm '${SRC_TAR}'" EXIT
 
 # --- Main Logic ---
 
