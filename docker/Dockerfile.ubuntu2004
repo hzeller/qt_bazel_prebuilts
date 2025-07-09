@@ -1,0 +1,78 @@
+# Dockerfile to set up a build environment with Qt/XCB dependencies and LLVM on Ubuntu 20.04
+
+# Use the official Ubuntu 20.04 base image
+FROM ubuntu:20.04
+
+# Set environment variables to allow for non-interactive installation of packages
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Add LLVM repository and install all dependencies in a single layer
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    software-properties-common && \
+    wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    ./llvm.sh 20 all &&\
+    apt-get install -y --no-install-recommends \
+    # LLVM toolchain for llvm-ifs
+    #llvm-20 \
+    #clang-20 \
+    # X11, XCB, and other graphics/font dependencies
+    libfontconfig1-dev \
+    libfreetype-dev \
+    libgtk-3-dev \
+    libx11-dev \
+    libx11-xcb-dev \
+    libxcb-cursor-dev \
+    libxcb-icccm4-dev \
+    libxcb-image0-dev \
+    libxcb-keysyms1-dev \
+    libxcb-randr0-dev \
+    libxcb-render-util0-dev \
+    libxcb-shape0-dev \
+    libxcb-shm0-dev \
+    libxcb-sync-dev \
+    libxcb-util-dev \
+    libxcb-xfixes0-dev \
+    libxcb-xkb-dev \
+    libxcb1-dev \
+    libxext-dev \
+    libxfixes-dev \
+    libxi-dev \
+    libxkbcommon-dev \
+    libxkbcommon-x11-dev \
+    libxrender-dev \
+    \
+    # Clean up apt cache to reduce image size
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+
+# Build IFSO and libs
+RUN mkdir -p interface_libs/xcb && \
+    cp -r /usr/include/xcb interface_libs/xcb && \
+    for lib in /usr/lib/x86_64-linux-gnu/libxcb-*.so; do \
+       llvm-ifs-20 --output-elf "/tmp/interface_libs/xcb/$(basename "$lib" .so).ifso" "$lib"; \
+    done &&\
+    mkdir -p interface_libs/xkbcommon && \
+    cp -r /usr/include/xkbcommon interface_libs/xkbcommon && \
+    for lib in /usr/lib/x86_64-linux-gnu/libxkb*.so; do \
+       llvm-ifs-20 --output-elf "/tmp/interface_libs/xkbcommon/$(basename "$lib" .so).ifso" "$lib"; \
+    done && \
+    mkdir -p interface_libs/fontconfig && \
+    cp -r /usr/include/fontconfig interface_libs/fontconfig && \
+    for lib in /usr/lib/x86_64-linux-gnu/libfont*.so; do \
+       llvm-ifs-20 --output-elf "/tmp/interface_libs/fontconfig/$(basename "$lib" .so).ifso" "$lib"; \
+    done && \
+    mkdir -p interface_libs/dbus && \
+    cp -r /usr/include/dbus-1.0/dbus interface_libs/dbus && \
+    for lib in /usr/lib/x86_64-linux-gnu/libdbus*.so; do \
+       llvm-ifs-20 --output-elf "/tmp/interface_libs/dbus/$(basename "$lib" .so).ifso" "$lib"; \
+    done && \
+    mkdir -p interface_libs/X11 && \
+    cp -r /usr/include/X11 interface_libs/X11 && \
+    for lib in libICE.so libSM.so libX11-xcb.so libX11.so; do \
+       llvm-ifs-20 --output-elf "/tmp/interface_libs/X11/$(basename "/usr/lib/x86_64-linux-gnu/$lib" .so).ifso" "/usr/lib/x86_64-linux-gnu/$lib"; \
+    done && \
+    tar -czf /tmp/interface_libs.tar.gz -C /tmp interface_libs 

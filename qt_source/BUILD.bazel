@@ -177,6 +177,7 @@ cc_library(
         "-DPCRE2_CODE_UNIT_WIDTH=16",
         "-DPCRE2_DISABLE_JIT",
     ],
+    includes = [QT_BASE + "/src/3rdparty/pcre2/src/"],
     defines = common_defines,
 )
 
