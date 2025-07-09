@@ -13,12 +13,13 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 DOCKERFILE="${SCRIPT_DIR}/Dockerfile.ubuntu2004"
 IMAGE_NAME="qt-libs-extractor"
 CONTAINER_NAME="temp-extractor"
-SRC_TAR="/tmp/${SCRIPT_DIR}/interface_libs.tar.gz"
+SRC_TAR="${SCRIPT_DIR}/interface_libs.tar.gz"
 DEST_DIR="${PROJECT_ROOT}/interface_libs"
 TEMP_DIR=$(mktemp -d -t ci-XXXXXXXXXX)
 
 # Ensure cleanup happens on script exit
 trap 'rm -rf "${TEMP_DIR}"' EXIT
+trap 'rm -rf "${SRC_DIR}"' EXIT
 
 # --- Main Logic ---
 
