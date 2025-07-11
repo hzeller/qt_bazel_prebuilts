@@ -67,7 +67,7 @@ bool QBackingStoreRhiSupport::create()
         rhi = QRhi::create(QRhi::Null, &params, flags);
     }
 
-#if QT_CONFIG(opengl)
+#if QT_CONFIG(opengl) && 0
     if (!rhi && m_config.api() == QPlatformBackingStoreRhiConfig::OpenGL) {
         surface = QRhiGles2InitParams::newFallbackSurface(m_format);
         QRhiGles2InitParams params;
