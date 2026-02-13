@@ -1576,6 +1576,7 @@ qt_internal_library(
         ":emoji_presentation_scanner",
         "//interface_libs/fontconfig",
         "//interface_libs/xkbcommon",
+        "@libxcb",
         # ":libxkbcommon_loose_headers",
         # ":libxkbcommon_no_libxcb",
         # "//third_party/GL:OpenGL_headers",
@@ -2176,6 +2177,7 @@ qt_internal_library(
         "//interface_libs/X11",
         "//interface_libs/xcb",
         "@glib//glib",
+        "@libxcb",
     ],
 )
 
