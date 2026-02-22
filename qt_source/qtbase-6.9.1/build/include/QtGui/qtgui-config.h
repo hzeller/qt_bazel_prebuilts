@@ -1,8 +1,13 @@
 #define QT_FEATURE_accessibility_atspi_bridge -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_freetype -1
+#define QT_FEATURE_fontconfig -1
+#define QT_NO_FREETYPE 1
+#else
 #define QT_FEATURE_freetype 1
-
 #define QT_FEATURE_fontconfig 1
+#endif
 
 #define QT_FEATURE_harfbuzz 1
 
@@ -24,15 +29,23 @@
 
 #define QT_FEATURE_openvg -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_egl -1
+#else
 #define QT_FEATURE_egl 1
+#endif
 
 #define QT_FEATURE_ico 1
 
 #define QT_FEATURE_sessionmanager 1
 
+#ifdef __APPLE__
+#define QT_FEATURE_xcb -1
+#define QT_FEATURE_xcb_glx_plugin -1
+#else
 #define QT_FEATURE_xcb 1
-
 #define QT_FEATURE_xcb_glx_plugin 1
+#endif
 
 #define QT_FEATURE_texthtmlparser 1
 

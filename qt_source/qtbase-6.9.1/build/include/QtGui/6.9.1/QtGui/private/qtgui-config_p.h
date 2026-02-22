@@ -10,13 +10,21 @@
 
 #define QT_FEATURE_direct2d1_1 -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_evdev -1
+#else
 #define QT_FEATURE_evdev 1
+#endif
 
+#ifdef __APPLE__
+#define QT_FEATURE_freetype -1
+#define QT_FEATURE_system_freetype -1
+#define QT_FEATURE_fontconfig -1
+#else
 #define QT_FEATURE_freetype 1
-
 #define QT_FEATURE_system_freetype 1
-
 #define QT_FEATURE_fontconfig 1
+#endif
 
 #define QT_FEATURE_harfbuzz 1
 
@@ -38,11 +46,19 @@
 
 #define QT_FEATURE_libinput_hires_wheel_support -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_linuxfb -1
+#else
 #define QT_FEATURE_linuxfb 1
+#endif
 
 #define QT_FEATURE_vsp2 -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_vnc -1
+#else
 #define QT_FEATURE_vnc 1
+#endif
 
 #define QT_FEATURE_mtdev -1
 
@@ -50,9 +66,13 @@
 
 #define QT_FEATURE_vkkhrdisplay -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_egl_x11 -1
+#define QT_FEATURE_eglfs -1
+#else
 #define QT_FEATURE_egl_x11 1
-
 #define QT_FEATURE_eglfs 1
+#endif
 
 #define QT_FEATURE_eglfs_brcm -1
 
@@ -72,7 +92,11 @@
 
 #define QT_FEATURE_eglfs_openwfd -1
 
+#ifdef __APPLE__
+#define QT_FEATURE_eglfs_x11 -1
+#else
 #define QT_FEATURE_eglfs_x11 1
+#endif
 
 #define QT_FEATURE_gif 1
 
@@ -92,25 +116,28 @@
 
 #define QT_FEATURE_tuiotouch 1
 
-#define QT_FEATURE_xcb_glx 1
-
-#define QT_FEATURE_xcb_egl_plugin 1
-
+#ifdef __APPLE__
+#define QT_FEATURE_xcb_glx -1
+#define QT_FEATURE_xcb_egl_plugin -1
 #define QT_FEATURE_xcb_native_painting -1
-
+#define QT_FEATURE_xcb_xlib -1
+#define QT_FEATURE_xcb_sm -1
+#define QT_FEATURE_xkbcommon -1
+#define QT_FEATURE_xkbcommon_x11 -1
+#define QT_FEATURE_xlib -1
+#else
+#define QT_FEATURE_xcb_glx 1
+#define QT_FEATURE_xcb_egl_plugin 1
+#define QT_FEATURE_xcb_native_painting -1
 #define QT_FEATURE_xrender -1
-
 #define QT_FEATURE_xcb_xlib 1
-
 #define QT_FEATURE_xcb_sm 1
+#define QT_FEATURE_xkbcommon 1
+#define QT_FEATURE_xkbcommon_x11 1
+#define QT_FEATURE_xlib 1
+#endif
 
 #define QT_FEATURE_system_xcb_xinput -1
-
-#define QT_FEATURE_xkbcommon 1
-
-#define QT_FEATURE_xkbcommon_x11 1
-
-#define QT_FEATURE_xlib 1
 
 #define QT_FEATURE_multiprocess 1
 
