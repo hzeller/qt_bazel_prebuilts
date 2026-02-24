@@ -29,10 +29,23 @@ cc_library(
     includes = ["."],
     strip_include_prefix = ".",
     visibility = ["//qt_source:__subpackages__"],
-    deps = [
-        ":x11_xcb_ifso",
-        ":x11_ifso",
-        ":x11_sm_ifso",
-        ":x11_ice_ifso",
-    ],
+    deps = select({
+        "@platforms//cpu:aarch64": [],
+        "//conditions:default": [
+            ":x11_xcb_ifso",
+            ":x11_ifso",
+            ":x11_sm_ifso",
+            ":x11_ice_ifso",
+        ],
+    }),
+    linkopts = select({
+        "@platforms//cpu:aarch64": [
+            "-L/usr/lib/aarch64-linux-gnu",
+            "-lX11",
+            "-lX11-xcb",
+            "-lSM",
+            "-lICE",
+        ],
+        "//conditions:default": [],
+    }),
 )

@@ -11,5 +11,15 @@ cc_library(
     includes = ["."],
     strip_include_prefix = ".",
     visibility = ["//qt_source:__subpackages__"],
-    deps = [":fontconfig_ifso"],
+    deps = select({
+        "@platforms//cpu:aarch64": [],
+        "//conditions:default": [":fontconfig_ifso"],
+    }),
+    linkopts = select({
+        "@platforms//cpu:aarch64": [
+            "-L/usr/lib/aarch64-linux-gnu",
+            "-lfontconfig",
+        ],
+        "//conditions:default": [],
+    }),
 )
