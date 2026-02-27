@@ -1,12 +1,14 @@
 """Starlark rule for running moc on Q_OBJECT files."""
 
+load("@rules_cc//cc:defs.bzl", "CcInfo")
+
 def _moc_impl(ctx):
     flags = [ctx.file.src.path]
-    flags += ["-I."]
-    flags += ["-I" + ctx.file.src.path[:ctx.file.src.path.rfind("/")]]
+    flags.append("-I.")
+    flags.append("-I" + ctx.file.src.path[:ctx.file.src.path.rfind("/")])
 
     # In an ideal world we would have grabbed these from the _internal_deps
-    # rule, but skylark doesn't want to expose the copts flag on the targets,
+    # rule, but starlark doesn't want to expose the copts flag on the targets,
     # so we have to pass them in separately.
     all_include_directories_list = [flag[2:] for flag in ctx.attr.copts if flag.startswith("-I")]
     all_defines_list = [flag[2:] for flag in ctx.attr.copts if flag.startswith("-D")]
@@ -54,30 +56,31 @@ def _moc_impl(ctx):
         # file doesn't have anything to moc-ify, which pollutes the blaze output;
         # the fix is to move the source file from moc_srcs to srcs, but this
         # isn't something that clients should need to worry about.
-        flags += ["--no-warnings"]
+        flags.append("--no-warnings")
 
     # Generate the flags for moc.
     for include in all_include_directories.to_list():
-        flags += ["-I" + include]
+        flags.append("-I" + include)
     for define in all_defines.to_list():
-        flags += ["-D" + define]
+        flags.append("-D" + define)
 
     if ctx.attr.rewrite_includes:
         # We use the -p flag to rewrite the generated include lines to be
-        # relative to google3/.
-        flags += ["-p" + ctx.file.src.dirname]
-    flags += ["-o" + ctx.outputs.out.path]
+        # relative to the binary directory.
+        flags.append("-p" + ctx.file.src.dirname)
+    flags.append("-o" + ctx.outputs.out.path)
 
     ctx.actions.run(
         outputs = [ctx.outputs.out],
         inputs = depset(direct = [ctx.file.src], transitive = [deptargets]),
+        mnemonic = "GenerateMoc",
         arguments = flags + ctx.attr.moc_opts,
         progress_message = "Generating MOC code from %s" % str(ctx.file.src.path),
         executable = ctx.executable._moc_binary,
     )
 
-# Private skylark rule to invoke moc on the given src.  Rather than
-# implementing this as a simple genrule, we use a skylark rule so we can
+# Private starlark rule to invoke moc on the given src. Rather than
+# implementing this as a simple genrule, we use a starlark rule so we can
 # collect extra include directories that might have been specified by
 # cc_library dependencies.
 moc_gen = rule(
@@ -89,7 +92,7 @@ moc_gen = rule(
         "moc_opts": attr.string_list(default = []),
         "out": attr.output(),
         "show_warnings": attr.bool(default = False),
-        "rewrite_includes": attr.bool(default = True),
+        "rewrite_includes": attr.bool(default = False),
         "transitive_deps": attr.bool(default = True),
         "_moc_binary": attr.label(
             executable = True,

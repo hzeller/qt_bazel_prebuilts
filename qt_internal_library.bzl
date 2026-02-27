@@ -1,5 +1,6 @@
 """Helpers for building QT framework libraries."""
 
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//:qt_tools.bzl", "moc_gen")
 
 def qt_internal_library(
@@ -89,9 +90,6 @@ def qt_internal_library(
     # We'll try to figure out what the first directory is by looking at the
     # first moc_hdr we find. If we can't find one, we'll just make something up
     # based on the source files that begins with qt.
-    for hdr in hdrs:
-        if "bootstrap" in hdr:
-            print(hdr)
     generated_out_dir = None
     if srcs and type(srcs) == type([]):
         for src in srcs:
@@ -140,18 +138,18 @@ def qt_internal_library(
         else:
             fail("Unsupported extension for %s" % src)
 
-        moc_genrules += [{
+        moc_genrules.append({
             "name": rulename,
             "source": src,
             "output": dest,
-        }]
+        })
 
         moc_files.append(dest)
 
     # Make a dummy library that lets us easily pass defines/copts/includes
     # along with the deps to the moc rule.
     internal_deps_lib_name = name + "_internal_deps"
-    native.cc_library(
+    cc_library(
         name = internal_deps_lib_name,
         compatible_with = compatible_with,
         copts = copts,
@@ -270,7 +268,7 @@ def qt_internal_library(
     if alwayslink_srcs:
         alwayslink_name = "_" + name + "_alwayslink"
         alwayslink_deps = [":" + alwayslink_name]
-        native.cc_library(
+        cc_library(
             name = alwayslink_name,
             alwayslink = 1,
             compatible_with = compatible_with,
@@ -284,7 +282,7 @@ def qt_internal_library(
             tags = tags,
         )
 
-    native.cc_library(
+    cc_library(
         name = name,
         srcs = srcs + platform_srcs,
         tags = tags,
@@ -332,7 +330,7 @@ def qt_static_plugin(
         compatible_with = compatible_with,
         cmd = "echo '#include <QtPlugin>\nQ_IMPORT_PLUGIN(%s);' > $@" % plugin_class_name,
     )
-    native.cc_library(
+    cc_library(
         name = name,
         compatible_with = compatible_with,
         copts = ["-DQT_STATICPLUGIN"],
@@ -344,136 +342,6 @@ def qt_static_plugin(
         srcs = [name + ".cc"],
         visibility = ["//visibility:public"],
         alwayslink = 1,
-    )
-
-def qt_cc_versionless_headers(qt_version, compatible_with = []):
-    """Generate a copy of the qt headers that can be reached by including third_party/qt/Qt*.
-
-    These are needed to emulate the cc_inc_library functionality for qt libs. Since we have multiple
-    targets that all need to provide the Qt headers, we need a single copy of
-    the duplicates so the layering check does not get confused. This rule
-    should only be invoked once in the BUILD file, and will generate targets
-    used by qt_cc_inc_library.
-
-    Args:
-      qt_version: decimal separated string containing the qt version.
-      compatible_with: passed to cc_library.
-    """
-    name = "_" + qt_version.replace(".", "_")
-    prefix = "includes/{}".format(name)
-    cmd = "mkdir --parents \"$(RULEDIR)/{}\"".format(prefix)
-    includes = []
-    outs = []
-    srcs = []
-
-    # Loop through all the extracted folders for the given qt version.
-    roots_with_include = native.glob(
-        ["*{}/include".format(qt_version.replace(".", "_"))],
-        exclude_directories = 0,
-    ) + native.glob(
-        ["*{}/build/include".format(qt_version.replace(".", "_"))],
-        exclude_directories = 0,
-    )
-    hdrs = []
-    for root_with_include in roots_with_include:
-        include_dir = "/build/include" if "build" in root_with_include else "/include"
-        root = root_with_include[:root_with_include.rfind(include_dir)]
-
-        # Copy over the entire contents of the 'include' directory, but put it so
-        # that after we add an include to it, it lives in third_party/qt/*
-        module_hdrs = native.glob([root + include_dir + "/**/*"])
-        hdrs += module_hdrs
-        srcs += module_hdrs
-        outs += ["{}/{}/third_party/qt/qt6/{}".format(
-            prefix,
-            root,
-            hdr.replace(root + include_dir + "/", ""),
-        ) for hdr in module_hdrs]
-        cmd += "; mkdir -p \"$(RULEDIR)/{}/{}/third_party/qt/qt6\"".format(prefix, root)
-        cmd += "; cp -r \"third_party/qt/qt6/{}{}\"/* \"$(RULEDIR)/{}/{}/third_party/qt/qt6\"".format(
-            root,
-            include_dir,
-            prefix,
-            root,
-        )
-
-        includes += [
-            "includes/{}/{}".format(name, root),
-            "includes/{}/{}/third_party/qt/qt6".format(name, root),
-        ]
-
-        # TODO(thorntonc): This snippet may be handy when we get rid of the
-        # :qt_headers dep in qt_cc_inc_library.
-        #
-        # # Add an individual include for each of the modules in this root.
-        # for module in native.glob([root + "/include/*"], exclude_directories = 0):
-        #     module_name = module[module.rfind("/") + 1:]
-        #     # Stuff in QtANGLE screws up the gl headers, so don't add the shortened path for that.
-        #     if module_name in ["QtANGLE"]:
-        #         continue
-        #     includes += ["includes/{}/{}/third_party/qt/{}".format(name, root, module_name)]
-
-        # Now grab all the .h files in the src directory. We'll put it in the
-        # third_party directory directly (not third_party/qt) because many of
-        # these headers have relative includes that assume the existence of the
-        # 'include' directory on the path. We'll try to minimize the size of
-        # the cmd by figuring out what directories have .h files in them, and
-        # just doing a cp *.h inside them.
-        module_src_hdrs = native.glob([root + "/src/**/*.h"] + [root + "/build/src/**/*.h"])
-        hdrs += module_src_hdrs
-
-        # Starlark does't have sets yet..., so meh, hopefully not too slow.
-        module_src_dirs = []
-        for module_src_hdr in module_src_hdrs:
-            module_src_dir = module_src_hdr[:module_src_hdr.rfind("/")].replace(root, "").strip("/")
-            srcs.append(module_src_hdr)
-            outs.append("{}/{}/third_party/{}/{}".format(
-                prefix,
-                root,
-                module_src_dir,
-                module_src_hdr[module_src_hdr.rfind("/") + 1:],
-            ))
-            if module_src_dir not in module_src_dirs:
-                module_src_dirs.append(module_src_dir)
-
-        for module_src_dir in module_src_dirs:
-            cmd += "; mkdir --parents \"$(RULEDIR)/{}/{}/third_party/{}\"".format(
-                prefix,
-                root,
-                module_src_dir,
-            )
-            cmd += "; cp \"third_party/qt/qt6/{}/{}/\"*.h \"$(RULEDIR)/{}/{}/third_party/{}\"".format(
-                root,
-                module_src_dir,
-                prefix,
-                root,
-                module_src_dir,
-            )
-
-    # Actually perform the copy.
-    native.genrule(
-        name = name + "_inc",
-        srcs = srcs,
-        outs = outs,
-        cmd = cmd,
-        compatible_with = compatible_with,
-        visibility = ["//visibility:private"],
-    )
-
-    native.filegroup(
-        name = name + "_hdrs",
-        srcs = hdrs,
-        compatible_with = compatible_with,
-    )
-
-    # Make a no-dep cc_library that we'll use to pick up the includes when we
-    # get around to making a qt_cc_inc_library.
-    native.cc_library(
-        name = name,
-        hdrs = [":" + name + "_inc"] + hdrs,
-        includes = includes,
-        compatible_with = compatible_with,
-        visibility = ["//visibility:private"],
     )
 
 def qt_cc_inc_library(name, qt_version, deps = [], compatible_with = [], linkopts = []):
@@ -490,7 +358,7 @@ def qt_cc_inc_library(name, qt_version, deps = [], compatible_with = [], linkopt
       linkopts: passed to cc_library.
     """
     qt_version_underscore = qt_version.replace(".", "_")
-    native.cc_library(
+    cc_library(
         name = name,
         hdrs = [":_" + qt_version_underscore + "_inc", ":_" + qt_version_underscore + "_hdrs"],
         deps = deps + [":_" + qt_version_underscore],
