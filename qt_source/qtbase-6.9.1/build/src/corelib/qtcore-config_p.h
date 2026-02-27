@@ -14,9 +14,17 @@
 
 #define QT_FEATURE_getentropy 1
 
+#ifdef __APPLE__
+#define QT_FEATURE_glib -1
+#else
 #define QT_FEATURE_glib 1
+#endif
 
+#ifdef __APPLE__
+#define QT_FEATURE_icu -1
+#else
 #define QT_FEATURE_icu 1
+#endif
 
 #define QT_FEATURE_inotify 1
 

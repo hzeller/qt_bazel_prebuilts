@@ -1,20 +1,13 @@
+// macOS-specific Qt Core public configuration
 #define QT_FEATURE_clock_monotonic 1
 
 #define QT_FEATURE_cxx11_future 1
 
 #define QT_FEATURE_cxx17_filesystem 1
 
-#ifdef __APPLE__
 #define QT_FEATURE_glib -1
-#else
-#define QT_FEATURE_glib 1
-#endif
 
-#ifdef __APPLE__
 #define QT_FEATURE_inotify -1
-#else
-#define QT_FEATURE_inotify 1
-#endif
 
 #define QT_FEATURE_std_atomic64 1
 
@@ -92,6 +85,4 @@
 
 #define QT_FEATURE_permissions 1
 
-#ifndef __APPLE__
 #define QT_THREADSAFE_CLOEXEC 1
-#endif

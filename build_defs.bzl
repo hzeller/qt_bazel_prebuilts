@@ -247,8 +247,16 @@ def qt6_library(
     deps.append("@qt-bazel//qt_source:widgets")
     deps.append("@qt-bazel//qt_source:charts")
     deps.append("@qt-bazel//qt_source:gui")
-    deps.append("@qt-bazel//qt_source:xcb_integration_plugin")
-    deps.append("@qt-bazel//qt_source:offscreen_plugin")
+    deps += select({
+        "@platforms//os:linux": [
+            "@qt-bazel//qt_source:xcb_integration_plugin",
+            "@qt-bazel//qt_source:offscreen_plugin",
+        ],
+        "@platforms//os:osx": [
+            "@qt-bazel//qt_source:cocoa_integration_plugin",
+        ],
+        "//conditions:default": [],
+    })
 
     # Add a header-only cc_library to pass in include flags, hdrs, and defines
     # to the moc call.  This allows the moc_gen Skylark rule to pass the

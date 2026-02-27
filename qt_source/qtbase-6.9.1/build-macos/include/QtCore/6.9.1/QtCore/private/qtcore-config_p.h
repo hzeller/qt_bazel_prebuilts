@@ -1,3 +1,6 @@
+// macOS-specific Qt Core private configuration
+// Generated for macOS (darwin) target; the Linux version is in build/include/
+
 #define QT_FEATURE_clock_gettime 1
 
 #define QT_FEATURE_doubleconversion 1
@@ -10,31 +13,15 @@
 
 #define QT_FEATURE_futimens 1
 
-#ifdef __APPLE__
 #define QT_FEATURE_getauxval -1
-#else
-#define QT_FEATURE_getauxval 1
-#endif
 
 #define QT_FEATURE_getentropy 1
 
-#ifdef __APPLE__
 #define QT_FEATURE_glib -1
-#else
-#define QT_FEATURE_glib 1
-#endif
 
-#ifdef __APPLE__
 #define QT_FEATURE_icu -1
-#else
-#define QT_FEATURE_icu 1
-#endif
 
-#ifdef __APPLE__
 #define QT_FEATURE_inotify -1
-#else
-#define QT_FEATURE_inotify 1
-#endif
 
 #define QT_FEATURE_journald -1
 
@@ -44,29 +31,17 @@
 
 #define QT_FEATURE_memmem 1
 
-#ifdef __APPLE__
 #define QT_FEATURE_memrchr -1
-#else
-#define QT_FEATURE_memrchr 1
-#endif
 
 #define QT_FEATURE_mimetype_database 1
 
 #define QT_FEATURE_system_pcre2 1
 
-#ifdef __APPLE__
 #define QT_FEATURE_poll_ppoll -1
-#else
-#define QT_FEATURE_poll_ppoll 1
-#endif
 
 #define QT_FEATURE_poll_pollts -1
 
-#ifdef __APPLE__
 #define QT_FEATURE_poll_poll 1
-#else
-#define QT_FEATURE_poll_poll -1
-#endif
 
 #define QT_FEATURE_poll_select -1
 
@@ -76,25 +51,13 @@
 
 #define QT_FEATURE_pthread_clockjoin -1
 
-#ifdef __APPLE__
 #define QT_FEATURE_pthread_condattr_setclock -1
-#else
-#define QT_FEATURE_pthread_condattr_setclock 1
-#endif
 
-#ifdef __APPLE__
 #define QT_FEATURE_pthread_timedjoin -1
-#else
-#define QT_FEATURE_pthread_timedjoin 1
-#endif
 
 #define QT_FEATURE_qqnx_pps -1
 
-#ifdef __APPLE__
 #define QT_FEATURE_renameat2 -1
-#else
-#define QT_FEATURE_renameat2 1
-#endif
 
 #define QT_FEATURE_slog2 -1
 
@@ -126,11 +89,7 @@
 
 #define QT_FEATURE_ctf -1
 
-#ifdef __APPLE__
 #define QT_FEATURE_forkfd_pidfd -1
-#else
-#define QT_FEATURE_forkfd_pidfd 1
-#endif
 
 #define QT_FEATURE_poll_exit_on_error -1
 

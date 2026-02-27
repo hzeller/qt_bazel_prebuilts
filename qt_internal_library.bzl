@@ -123,6 +123,8 @@ def qt_internal_library(
 
     moc_genrules = []
     moc_files = []
+    moc_src_files = []  # From headers: compiled as separate translation units
+    moc_textual_files = []  # From .cpp: included via #include "foo.moc"
     for src in moc_hdrs:
         rulename = "MOC_" + outdir_suffix.replace("/", "_") + "_" + src.replace("/", "_").replace(":", "_")
 
@@ -131,21 +133,10 @@ def qt_internal_library(
 
         if filename[-1:] == "h":
             dest = moc_out_dir + "moc_" + filename[:-2] + ".cpp"
+            moc_src_files.append(dest)
         elif filename[-3:] == "cpp":
             dest = moc_out_dir + filename[:-4] + ".moc"
-            # The modified file will just have the same name with a different extension
-            # temp = src[:last_slash] + outdir_suffix + filename
-            # temp = temp.replace(".cpp", ".cc")
-            # native.genrule(
-            #     name = "SED" + rulename,
-            #     srcs = [src],
-            #     outs = [temp],
-            #     cmd = "sed '/# *include/s/.moc\\([\">]\\)/.moc\\1/g' $< > $@",
-            #     compatible_with = compatible_with,
-            # )
-            # srcs.remove(src)
-            # srcs.append(temp)
-
+            moc_textual_files.append(dest)
         else:
             fail("Unsupported extension for %s" % src)
 
