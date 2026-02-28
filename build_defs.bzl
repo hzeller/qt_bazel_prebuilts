@@ -1,6 +1,7 @@
 """Build definitions for qt 6."""
 
 load("@qt-bazel//:qt_tools.bzl", "moc_gen")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
 def _copy_or_empty_list(vals):
     # Starlark has no list copy() function.
@@ -206,12 +207,12 @@ def qt6_library(
 
         # Don't add moc_hdr to hdrs if it's already there
         if moc_hdr not in hdrs:
-            hdrs += [moc_hdr]
+            hdrs.append(moc_hdr)
 
         srcs.append(moc_file)
 
     for moc_textual_hdr in moc_textual_hdrs:
-        (moc_textual_hdr, sep, moc_hdr_file) = moc_textual_hdr.rpartition("/")
+        (moc_hdr_dir, sep, moc_hdr_file) = moc_textual_hdr.rpartition("/")
 
         if moc_textual_hdr.endswith(".h"):
             base_name = moc_hdr_file[0:-2]
@@ -222,11 +223,11 @@ def qt6_library(
         else:
             fail("Unsupported extension for %s" % moc_textual_hdr, "moc_textual_hdrs")
         moc_file = (
-            moc_textual_hdr + sep + "moc_h_" + qt_gui_platform + "_" + base_name + ".cc"
+            moc_hdr_dir + sep + "moc_h_" + qt_gui_platform + "_" + base_name + ".cc"
         )
         moc_genrules.append({
             "name": (
-                (moc_textual_hdr + sep).replace("/", "_") +
+                (moc_hdr_dir + sep).replace("/", "_") +
                 "moc_h_" +
                 qt_gui_platform +
                 "_" +
@@ -259,12 +260,12 @@ def qt6_library(
     })
 
     # Add a header-only cc_library to pass in include flags, hdrs, and defines
-    # to the moc call.  This allows the moc_gen Skylark rule to pass the
+    # to the moc call.  This allows the moc_gen starlark rule to pass the
     # appropriate hdrs, includes, and defines from the outer qt6_library
     # without a bunch of trickery, since from the perspective of the moc_gen
     # internals this is just another dependency.
     internal_deps_lib_name = name + "_internal_deps"
-    native.cc_library(
+    cc_library(
         name = internal_deps_lib_name,
         includes = includes,
         textual_hdrs = library_hdrs,
@@ -286,7 +287,7 @@ def qt6_library(
             compatible_with = compatible_with,
         )
 
-    native.cc_library(
+    cc_library(
         name = name,
         defines = defines,
         srcs = srcs,
@@ -312,7 +313,6 @@ def qt6_resource_library(
         root = None,
         external_init_name = None,
         alwayslink = 1,
-        qt_gui_platform = "nogl",
         **kwargs):
     """Creates a Qt resources library.
 
@@ -332,9 +332,6 @@ def qt6_resource_library(
       alwayslink: Passed onto the qt6_library rule; if set to False/0, then a Q_INIT_RESOURCE
         statement will be needed to load the resources at runtime;if set to True/1, then no such
         statement is required.
-      qt_gui_platform: specifies which windowing system the GUI libraries should be built for.
-        Currently supported options are: "native" for X11 + hardware-accelerated OpenGL, "headless"
-        for headless systems such as forge/borg + software-based OpenGL
       **kwargs: Forwards other arguments onto the generated build rules.
     """
 
@@ -381,7 +378,7 @@ def qt6_resource_library(
     )
 
     # Generates the library.
-    native.cc_library(
+    cc_library(
         name = name,
         srcs = [out],
         alwayslink = alwayslink,
