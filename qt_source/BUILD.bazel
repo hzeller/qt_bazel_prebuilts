@@ -677,6 +677,22 @@ genrule(
     cmd = "cp $< $@",
 )
 
+config_setting(
+    name = "linux_x86_64",
+    constraint_values = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "linux_aarch64",
+    constraint_values = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+)
+
 # The bootstrap lib includes functionality that's needed by moc and freinds,
 # and thus needs to be built without moc.
 cc_library(
@@ -788,7 +804,7 @@ cc_library(
         "-fvisibility=hidden",
         "-std=gnu++20",
     ] + select({
-        "@platforms//os:linux": ["-mshstk"],
+        ":linux_x86_64": ["-mshstk"],
         "@platforms//os:osx": ["-x", "objective-c++"],
         "//conditions:default": [],
     }),
@@ -2106,7 +2122,16 @@ qt_internal_library(
         QT_BASE + "/src/gui/kernel/qshortcutmap.cpp",
         QT_BASE + "/src/gui/image/qmovie.cpp",
         QT_BASE + "/src/gui/image/qpnghandler.cpp",
-        # SSE/AVX sources moved to platform_srcs (x86 only)
+        # SSE/AVX drawing helpers (x86 only)
+        QT_BASE + "/src/gui/painting/qdrawhelper_sse2.cpp",
+        QT_BASE + "/src/gui/image/qimage_ssse3.cpp",
+        QT_BASE + "/src/gui/painting/qdrawhelper_ssse3.cpp",
+        QT_BASE + "/src/gui/painting/qdrawhelper_sse4.cpp",
+        QT_BASE + "/src/gui/painting/qimagescale_sse4.cpp",
+        QT_BASE + "/src/gui/painting/qdrawhelper_avx2.cpp",
+        QT_BASE + "/src/gui/painting/qdrawhelper_neon.cpp",
+        QT_BASE + "/src/gui/painting/qimagescale_neon.cpp",
+        QT_BASE + "/src/gui/image/qimage_neon.cpp",
         QT_BASE + "/src/gui/text/qharfbuzzng.cpp",
         QT_BASE + "/src/gui/text/qtextodfwriter.cpp",
         QT_BASE + "/src/gui/text/qtextmarkdownimporter.cpp",
@@ -2131,13 +2156,6 @@ qt_internal_library(
         "@platforms//os:linux": [
             # Pre-generated mocs compilation (includes unix event dispatcher moc)
             QT_BASE + "/build/src/gui/Gui_autogen/mocs_compilation.cpp",
-            # SSE/AVX drawing helpers (x86 only)
-            QT_BASE + "/src/gui/painting/qdrawhelper_sse2.cpp",
-            QT_BASE + "/src/gui/image/qimage_ssse3.cpp",
-            QT_BASE + "/src/gui/painting/qdrawhelper_ssse3.cpp",
-            QT_BASE + "/src/gui/painting/qdrawhelper_sse4.cpp",
-            QT_BASE + "/src/gui/painting/qimagescale_sse4.cpp",
-            QT_BASE + "/src/gui/painting/qdrawhelper_avx2.cpp",
             # Freetype/fontconfig text rendering
             QT_BASE + "/src/gui/text/freetype/qfontengine_ft.cpp",
             QT_BASE + "/src/gui/text/freetype/qfreetypefontdatabase.cpp",
@@ -2167,9 +2185,6 @@ qt_internal_library(
         "@platforms//os:osx": [
             # macOS mocs compilation (excludes unix event dispatcher moc)
             "gui_macos_mocs_compilation.cpp",
-            # NEON files excluded: qdrawhelper_neon.cpp has ARM32 inline asm
-            # that can't compile on AArch64. We disable __ARM_NEON__ via copts
-            # to fall back to generic C implementations in qdrawhelper.cpp.
             # CoreText font rendering
             ":qcoretextfontdatabase_cpp",
             ":qfontengine_coretext_cpp",
@@ -2219,7 +2234,7 @@ qt_internal_library(
         "-Wno-non-virtual-dtor",
         "-Wno-string-conversion",
     ] + select({
-        "@platforms//os:linux": [
+        ":linux_x86_64": [
             "-Wl,-Bsymbolic-functions",
             "-Wl,--no-undefined",
             "-Wl,-z,relro,-z,now",
@@ -2227,13 +2242,13 @@ qt_internal_library(
             "-shared",
             "-march=core-avx2",
         ],
+        ":linux_aarch64": [],
         "@platforms//os:osx": [
             "-x", "objective-c++",
-            "-U__ARM_NEON__", "-U__ARM_NEON",
         ],
     }),
     conlyopts = select({
-        "@platforms//os:osx": ["-x", "objective-c", "-U__ARM_NEON__", "-U__ARM_NEON"],
+        "@platforms//os:osx": ["-x", "objective-c"],
         "//conditions:default": [],
     }),
     includes = [
@@ -2271,8 +2286,10 @@ qt_internal_library(
         ],
     }),
     linkstatic = True,
-    local_defines = [
-        "ENABLE_PIXMAN_DRAWHELPERS",
+    local_defines = select({
+        "@platforms//cpu:x86_64": ["ENABLE_PIXMAN_DRAWHELPERS"],
+        "//conditions:default": [],
+    }) + [
         "Gui_EXPORTS",
         "MD4C_USE_UTF8",
         "QT_ASCII_CAST_WARNINGS",
